@@ -15,14 +15,9 @@ sur le file descriptor.
 
 # Valeur de retour
 
-+ 1
-Si la ligne a été lue.
-
-+  0
-Si la lecture est terminée.
-
-+ -1
-Si il surviens une erreur.
++  1 - Si la ligne a été lue.
++  0 - Si la lecture est terminée.
++ -1 - Si il surviens une erreur.
 
 Get next ligne doit renvoyer son resultat sans le '\n'
 # Fonctionnement #
@@ -37,6 +32,9 @@ sur l'entree standard ou depuis une redirection...etc
 Pseudo Code
 ===========
 
-### Fonction : ft_check_line(char *str, int size) ###
+### Fonction : int  ft_check_line(char *str, int size) ###
 
+Cette fonction renvoit un entier en fonction du contenu de **str**.
 
++ 1 - Si la première occurence est un **'\n'**.
++ 2 - Si la première occurence est un **'\0'**.
