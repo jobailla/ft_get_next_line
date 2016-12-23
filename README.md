@@ -15,9 +15,9 @@ sur le file descriptor.
 
 # Valeur de retour
 
-+  1 - Si la ligne a été lue.
-+  0 - Si la lecture est terminée.
-+ -1 - Si il surviens une erreur.
++ **1** - Si la ligne a été lue.
++ **0** - Si la lecture est terminée.
++ **-1** - Si il surviens une erreur.
 
 Get next ligne doit renvoyer son resultat sans le '\n'
 # Fonctionnement #
@@ -34,7 +34,23 @@ Pseudo Code
 
 ### Fonction : int  ft_check_line(char *str, int size) ###
 
++ str = Chaine de caractère
++ size = La longeur de la chaine de caractère
 Cette fonction renvoit un entier en fonction du contenu de **str**.
 
-+ 1 - Si la première occurence est un **'\n'**.
-+ 2 - Si la première occurence est un **'\0'**.
++ **1** - Si la première occurence est un **'\n'**.
++ **2** - Si la première occurence est un **'\0'**.
++ **0** - Si **str** necontiens aucuns **'\n'** ou **'\0'**
+
+(utliser ft_strchr pour trouver la premier occurence)
+**size** doit étre supérieur à **0** sinon c'est **BUFF_SIZE** qui définira la longeur de **str**
+
+### Fonction : 
+
+### Fonction : 
+
+### Fonction : 
+
+### Fonction : int  get_next_line(int const fd, char **line)
+
+Si **line** est nulle ou si **fd** est inférieur à 0 ou suprérieur à 255 ou si **BUFF_SIZE** est inférieur à 1 la fonction doit renvoyer **-1**
