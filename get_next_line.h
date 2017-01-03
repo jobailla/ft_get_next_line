@@ -6,7 +6,7 @@
 /*   By: jobailla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/20 00:08:52 by jobailla          #+#    #+#             */
-/*   Updated: 2017/01/03 03:52:39 by jobailla         ###   ########.fr       */
+/*   Updated: 2017/01/03 04:05:19 by jobailla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 typedef struct		s_gnl
 {
 	int				fd;
+	size_t			size;
 	char			*line;
 	struct s_gnl	*next;
 //	struct s_gnl	*prev;
