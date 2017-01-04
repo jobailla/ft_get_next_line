@@ -1,55 +1,70 @@
-#****************************************************************************  #
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jobailla <jobailla@student.42.fr>          +#+  +:+       +#+         #
+#    By: jobailla <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2016/08/23 11:29:22 by jobailla          #+#    #+#              #
-#*   Updated: 2016/11/11 21:54:56 by jobailla         ###   ########.fr       *#
+#    Created: 2016/12/23 19:27:01 by jobailla          #+#    #+#              #
+#    Updated: 2017/01/03 18:04:13 by jobailla         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libft.a
-COMPIL = gcc -Wall -Werror -Wextra
+NAME := libft.a
 
-# FILES #
-C_FILE = $(LIBC) $(FT) $(BONNUS) $(PERSO)
-LIBC =		ft_memset.c		ft_bzero.c		ft_strlen.c		ft_strdup.c		\
-			ft_strcpy.c		ft_strncpy.c	ft_strcat.c		ft_strncat.c	\
-			ft_strlcat.c	ft_strstr.c		ft_strnstr.c	ft_strcmp.c 	\
-			ft_strncmp.c	ft_atoi.c		ft_isalpha.c	ft_isdigit.c 	\
-			ft_isalnum.c	ft_isascii.c	ft_isprint.c	ft_toupper.c 	\
-			ft_tolower.c	ft_memcpy.c		ft_memccpy.c	ft_memcmp.c		\
-			ft_memmove.c	ft_strchr.c		ft_strrchr.c	ft_memchr.c		
+INCS := includes
+SRCS := libft
+OBJS := objs
 
-FT =		ft_strclr.c		ft_putchar.c	ft_putstr.c		ft_putendl.c	\
-			ft_putnbr.c		ft_putchar_fd.c	ft_putstr_fd.c	ft_putnbr_fd.c	\
-			ft_memalloc.c	ft_memdel.c		ft_strdel.c		ft_strnew.c		\
-			ft_striter.c	ft_striteri.c	ft_strmap.c		ft_itoa.c		\
-			ft_strmapi.c	ft_strequ.c		ft_strnequ.c	ft_strsub.c		\
-			ft_strjoin.c	ft_strtrim.c	ft_strsplit.c	ft_putendl_fd.c
 
-BONNUS =	ft_islower.c	ft_isupper.c	ft_isblank.c	ft_lstnew.c		\
-			ft_lstdelone.c	ft_lstdel.c		ft_lstadd.c		ft_lstiter.c	\
-			ft_lstmap.c
+SHELL := /bin/bash
 
-PERSO =		ft_nbrlen.c		ft_isspace.c	ft_isblank_and_newline.c		\
-			ft_count_word.c
+INCLUDES := -I$(INCS)
 
-O_FILE = $(C_FILE:.c=.o)
+# Search source files
+C_FILES 		:= $(shell find $(SRCS) -type f)
+C_DIRS			:= $(shell find $(SRCS) -type d)
+C_FLAGS			+= -Wall -Wextra -Werror -MMD -g -O2 -ggdb
 
-all: $(NAME)
+# Build .o list
+O_DIRS			:= $(addprefix $(OBJS)/,$(C_DIRS))
+O_FILES			:= $(C_FILES:%.c=$(OBJS)/%.o)
+O_FILES_UNIT	:= $(C_FILES_UNIT:%.c=$(OBJS)/%.o)
 
-$(NAME):
-	@$(COMPIL) -c $(C_FILE) -I libft.h
-	@ar rc $(NAME) $(O_FILE)
-	@ranlib $(NAME)
+DEPS := $(O_FILES:.o=.d)
+
+# Create OBJS and childs
+$(shell mkdir -p $(O_DIRS) $(OBJS))
+
+# Print
+ACTUAL = $(words $(COUNT))
+TOTAL  = $(words $(filter %.c,$(C_FILES)))
+CALCUL = $(shell echo $(ACTUAL)\*100\/$(TOTAL) | bc)
+PYTHON = $(shell python -c "print '%-10s' % ('I'*($(CALCUL)/10))")
+
+PRINT_RED   = printf " [\033[31;1m%s\033[0m]\033[31;1m\t%3s%%\033[0m\t-->>\t\033[31;1m%-65s\033[0m\r" "$(PYTHON)" "$(CALCUL)"
+PRINT_GREEN = printf " [\033[32;1m%s\033[0m]\033[32;1m\t%3s%%\033[0m\t-->>\t\033[32;1m%-65s\033[0m\r" "    Ok!   " "100"
+
+all:
+	make -j $(NAME)
+
+$(NAME): $(O_FILES)
+	$(PRINT_GREEN) $(SRCS) && echo || exit;
+	ar rc $(NAME) $(O_FILES)
+	ranlib $(NAME)
+
+$(OBJS)/%.o: %.c
+	clang $(C_FLAGS) $(INCLUDES) -o $@ -c $< && $(eval COUNT+=1) $(PRINT_RED) $< || exit
 
 clean:
-	@rm -f $(O_FILE)
+	rm -rf $(O_FILES) $(OBJS) 2> /dev/null
 
 fclean: clean
-	@rm -f $(NAME)
+	rm -f $(NAME) 2> /dev/null
 
 re: fclean all
+
+-include $(DEPS)
+
+.PHONY: all clean fclean re
+.SILENT:
