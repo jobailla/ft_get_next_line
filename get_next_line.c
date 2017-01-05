@@ -6,13 +6,13 @@
 /*   By: jobailla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/20 00:22:31 by jobailla          #+#    #+#             */
-/*   Updated: 2017/01/04 22:44:43 by jobailla         ###   ########.fr       */
+/*   Updated: 2017/01/05 06:47:29 by jobailla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static	t_gnl	*ft_find_fd_in_list(t_gnl **head, int const fd)
+static	t_gnl	*find_fd(t_gnl **head, int const fd)
 {
 	t_gnl	*new;
 	t_gnl	*tmp;
@@ -24,17 +24,16 @@ static	t_gnl	*ft_find_fd_in_list(t_gnl **head, int const fd)
 			return (tmp);
 		tmp = tmp->next;
 	}
-	if (0 != (new = (t_gnl *)ft_memalloc(sizeof(t_gnl))))
-	{
-		new->fd = fd;
-		ft_bzero(new->buf, BUFF_SIZE + 1);
-		new->next = *head;
-		*head = new;
-	}
+	if (!(new = (t_gnl *)ft_memalloc(sizeof(t_gnl))))
+		return (0);
+	new->fd = fd;
+	ft_bzero(new->buf, BUFF_SIZE);
+	new->next = *head;
+	*head = new;
 	return (new);
 }
 
-static int		ft_look_for_buffer(t_gnl *item, char **line)
+static int		look_buf(t_gnl *item, char **line)
 {
 	char	*tmp;
 
@@ -51,7 +50,7 @@ static int		ft_look_for_buffer(t_gnl *item, char **line)
 	return (0);
 }
 
-static int		ft_look_for_read(t_gnl *item, char **line)
+static int		look_for_read(t_gnl *item, char **line)
 {
 	char	*tmp;
 	char	*save;
@@ -74,7 +73,7 @@ static int		ft_look_for_read(t_gnl *item, char **line)
 		return (0);
 }
 
-static int		ft_read_from_fd(t_gnl *item, char **line)
+static int		read_fd(t_gnl *item, char **line)
 {
 	int		ret;
 
@@ -83,9 +82,10 @@ static int		ft_read_from_fd(t_gnl *item, char **line)
 		if (ret == -1)
 			return (-1);
 		item->buf[ret] = '\0';
-		ret = ft_look_for_read(item, line);
+		ret = look_for_read(item, line);
 		if (ret != 0)
 			return (ret);
+		ft_bzero(item->buf, BUFF_SIZE + 1);
 	}
 	return (ft_strlen(*line) != 0);
 }
@@ -98,11 +98,11 @@ int				get_next_line(const int fd, char **line)
 
 	if (line == NULL || fd < 0 || BUFF_SIZE < 1)
 		return (-1);
-	tmp = ft_find_fd_in_list(&lst, fd);
+	tmp = find_fd(&lst, fd);
 	if (tmp == NULL)
 		return (-1);
-	ret = ft_look_for_buffer(tmp, line);
+	ret = look_buf(tmp, line);
 	if (!ret)
-		ret = ft_read_from_fd(tmp, line);
+		ret = read_fd(tmp, line);
 	return (ret);
 }
