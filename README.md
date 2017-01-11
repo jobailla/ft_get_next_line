@@ -78,27 +78,3 @@ Dans tous les cas on libere save
  Ensuite si tmp existe (tmp = pointeur sur le '\n'), on fait une copie de item->buf dans tmp et on renvoi 1
 
  Si tmp n'existe pas on renvoi 0.
-
-### Fonction :  int   read_from_fd(t_gnl *item, char **line)
-------------------------------------------------------------
-
-* int    ret
-
-ret = read()
-
-La fonction va lire le fd et si il est valide (!+= -1) envoyer item et line a look_for_read et stoker le resultat dans ret avant de la renvoyer
-
-Sinon la fonction renvoie un entier positif (strlen(*line)
-
-### Fonction :  int   get_next_line(int const fd, char **line)
---------------------------------------------------------------
-
-*      static t_gnl  *lst = NULL
-*      t_gnl         *tmp
-*      int           ret
-
-+ la fonction test si le fd est < 0 ou si BUFF_SIZE est < 1 ou si *line est NULL, si c'est le cas la fonction renvoi 0
-+ Stoker le maillon crée par find_fd dans tmp si l'alocation échoue on renvoi -1
-
-+ Si ret n'existe pas encore on lui donne la valeur de retour read_from_fd puis en renvoie ret.
-
