@@ -6,7 +6,7 @@
 /*   By: jobailla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/27 14:42:44 by jobailla          #+#    #+#             */
-/*   Updated: 2017/01/07 13:33:36 by jobailla         ###   ########.fr       */
+/*   Updated: 2017/01/09 09:28:58 by jobailla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ int			main(int ac,	char **av)
 		while((i = get_next_line(fd, &line)) > 0)
 		{
 			c++;
-			printf("\x1b[32m-> [%d] SORTIE GNL : %s\n", i, line);
+			printf(GRN"[%d] SORTIE GNL : %s\n" NRM, i, line);
 		}
 		if (i == 0)
-			printf("\x1b[33m-> [%d] SORTIE GNL : %s\n", i, line);
+			printf(YEL"[%d] SORTIE GNL : %s\n" NRM, i, line);
 		if (i == (-1))
-			printf("\x1b[31m-> [%d] SORTIE GNL : %s\n", i, line);
-		printf("\x1b[36mindex read line : %d\n", c);
-		printf("\x1b[35mindex fd	: %d\n", x);
+			printf(RED"[%d] SORTIE GNL : %s\n" NRM, i, line);
+		printf(CYN"index read line : %d\n " NRM, c);
+		printf(MAG"index fd	: %d\n" NRM, x);
 		x++;
 	}
 }

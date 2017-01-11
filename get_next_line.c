@@ -6,7 +6,7 @@
 /*   By: jobailla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/20 00:22:31 by jobailla          #+#    #+#             */
-/*   Updated: 2017/01/05 06:47:29 by jobailla         ###   ########.fr       */
+/*   Updated: 2017/01/09 09:09:09 by jobailla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int		look_buf(t_gnl *item, char **line)
 		ft_strcpy(item->buf, tmp);
 		return (1);
 	}
-	bzero(item->buf, BUFF_SIZE + 1);
+	ft_bzero(item->buf, BUFF_SIZE);
 	return (0);
 }
 
@@ -69,8 +69,7 @@ static int		look_for_read(t_gnl *item, char **line)
 		ft_strcpy(item->buf, tmp);
 		return (1);
 	}
-	else
-		return (0);
+	return (0);
 }
 
 static int		read_fd(t_gnl *item, char **line)
@@ -85,7 +84,7 @@ static int		read_fd(t_gnl *item, char **line)
 		ret = look_for_read(item, line);
 		if (ret != 0)
 			return (ret);
-		ft_bzero(item->buf, BUFF_SIZE + 1);
+		ft_bzero(item->buf, BUFF_SIZE);
 	}
 	return (ft_strlen(*line) != 0);
 }
@@ -96,10 +95,7 @@ int				get_next_line(const int fd, char **line)
 	t_gnl			*tmp;
 	int				ret;
 
-	if (line == NULL || fd < 0 || BUFF_SIZE < 1)
-		return (-1);
-	tmp = find_fd(&lst, fd);
-	if (tmp == NULL)
+	if (line == NULL || fd < 0 || BUFF_SIZE < 1 || !(tmp = find_fd(&lst, fd)))
 		return (-1);
 	ret = look_buf(tmp, line);
 	if (!ret)
