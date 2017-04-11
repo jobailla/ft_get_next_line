@@ -1,3 +1,5 @@
+![GnL](./GnL.png "GnL")
+
 Get next line
 =============
 Get next line est une fonction qui renvoi une ligne depuis un file descriptor.
